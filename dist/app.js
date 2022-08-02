@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var app_models_1 = require("./app.models");
 var app = express();
-var port = 3000;
 app.get("/", function (req, res) {
-    res.send({ hello: "dd" });
+    console.log(req);
+    res.send({ cats: app_models_1.Cat });
 });
-app.listen(port, function () {
-    console.log("Example app listening on port " + port);
+app.listen(8000, function () {
+    console.log("server is on...");
 });
 //# sourceMappingURL=app.js.map
