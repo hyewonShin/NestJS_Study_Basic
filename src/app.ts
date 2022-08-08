@@ -13,6 +13,7 @@ app.use((req, res, next) => {
 // * json middleware
 app.use(express.json());
 
+// cats 라우터 등록
 app.use(catsRouter);
 
 // * 404 middleware

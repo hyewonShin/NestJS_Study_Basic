@@ -49,4 +49,51 @@ router.post("/cat", (req, res) => {
   }
 });
 
+// * UPDATE 고양이 데이터 업데이트 -> PUT
+router.put("/cat/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    let result;
+    Cat.forEach((cat) => {
+      if (cat.id === id) {
+        cat = body;
+        result = cat;
+      }
+    });
+    res.status(200).send({ success: true, cat: result });
+  } catch (error: any) {
+    res.status(400).send({ success: false, error: error.message });
+  }
+});
+
+// * UPDATE 고양이 데이터 부분적으로 업데이트 -> PATCH
+router.patch("/cat/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    let result;
+    Cat.forEach((cat) => {
+      if (cat.id === id) {
+        cat = { ...cat, ...body };
+        result = cat;
+      }
+    });
+    res.status(200).send({ success: true, cat: result });
+  } catch (error: any) {
+    res.status(400).send({ success: false, error: error.message });
+  }
+});
+
+// * UPDATE 고양이 데이터 삭제 -> DELETE
+router.delete("/cat/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const newCat = Cat.filter((cat) => cat.id !== id);
+    res.status(200).send({ success: true, data: newCat });
+  } catch (error: any) {
+    res.status(400).send({ success: false, error: error.message });
+  }
+});
+
 export default router;
