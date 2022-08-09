@@ -1,30 +1,52 @@
 import * as express from "express";
 import catsRouter from "./cats/cats.route";
 
-const app: express.Express = express();
+class Server {
+  public app: express.Application;
 
-// * logging meddleware
-app.use((req, res, next) => {
-  console.log(req.rawHeaders[1]);
-  console.log("this is middlware");
-  next();
-});
+  constructor() {
+    const app: express.Application = express();
+    this.app = app;
+  }
 
-// * json middleware
-app.use(express.json());
+  private setRoute() {
+    this.app.use(catsRouter);
+  }
 
-// cats 라우터 등록
-app.use(catsRouter);
+  private setMiddleware() {
+    // * logging meddleware
+    this.app.use((req, res, next) => {
+      console.log(req.rawHeaders[1]);
+      console.log("this is middlware");
+      next();
+    });
 
-// * 404 middleware
-app.use((req, res, next) => {
-  console.log("this is error middleware");
-  res.send({ error: "404에러입니다." });
-});
+    // * json middleware
+    this.app.use(express.json());
 
-app.listen(7000, () => {
-  console.log("server is on...");
-});
+    this.setRoute();
+
+    // * 404 middleware
+    this.app.use((req, res, next) => {
+      console.log("this is error middleware");
+      res.send({ error: "404에러입니다." });
+    });
+  }
+
+  public listen() {
+    this.setMiddleware();
+    this.app.listen(7000, () => {
+      console.log("server is on...");
+    });
+  }
+}
+
+function init() {
+  const server = new Server();
+  server.listen();
+}
+
+init();
 
 // app.use : 모든 api에 미들웨어로 사용 가능
 // app.get : 특정 api에 미들웨어로 사용 가능
